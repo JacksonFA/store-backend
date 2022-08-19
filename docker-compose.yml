@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  db:
+    build: .docker/postgres
+    container_name: store-backend-db
+    restart: always
+    tty: true
+    volumes:
+      - ./.docker/dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=store
+
+  app:
+    build: .
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: store-backend-app
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: store-backend-pgadmin
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@user.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - "9001:80"
+    depends_on:
+      - db
