@@ -5,9 +5,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import slugify from 'slugify';
-
+//ORM Object Relation Mapper
+//Repository
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -36,7 +37,7 @@ export class Product {
     if (this.id) {
       return;
     }
-    this.id = uuid();
+    this.id = uuidv4();
   }
 
   @BeforeInsert()
